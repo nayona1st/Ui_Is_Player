@@ -12,13 +12,19 @@ namespace PSW._01.Code.MapSystem
         
         private Vector2 _mousePos;
 
-        public Vector2 MousePos => Camera.main.ScreenToWorldPoint(_mousePos);
+        private Camera _mainCam;
+
+        public Vector2 MousePos => _mainCam.ScreenToWorldPoint(_mousePos);
 
         private MapControls _controls;
         
         public void SetEnable()
         {
-            _controls ??= new MapControls();
+            if(_mainCam == null)
+                _mainCam = Camera.main;
+            
+            if(_controls == null)
+                _controls = new MapControls();
             _controls.Enable();
             _controls.Player.SetCallbacks(this);
         }
