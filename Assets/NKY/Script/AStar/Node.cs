@@ -20,7 +20,7 @@ namespace NKY.Script.AStar
 
         public Node(int cost, bool canMove, Vector2 nodeWorldPos, Vector2Int gridPos)
         {
-            MoveCost = cost;
+            MoveCost = cost >= 1 ? cost : 1;
             CanMove = canMove;
             NodeWorldPos = nodeWorldPos;
             NodeGridPos = gridPos;

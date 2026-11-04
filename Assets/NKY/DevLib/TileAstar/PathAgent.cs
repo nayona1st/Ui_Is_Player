@@ -92,7 +92,7 @@ namespace DevLib.TileAstar
                     nextAstar.F = newG + CalcH(nextNode.cellPosition, destNode.cellPosition);
                     
                     //이미 오픈리스트에 있다면 어떤 값이 작은지 체크해야해.
-                    AstarNode existInOpenNode = openList.Contains(nextAstar);
+                    AstarNode existInOpenNode = openList.Find(nextAstar);
                     if (existInOpenNode != null)
                     {
                         if (nextAstar.G < existInOpenNode.G)
