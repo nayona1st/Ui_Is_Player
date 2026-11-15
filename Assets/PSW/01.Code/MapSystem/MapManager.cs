@@ -1,10 +1,12 @@
+using PSW._01.Code.BlockSystem;
+using PSW._01.Code.CoreSystem;
 using UnityEngine;
 
 namespace PSW._01.Code.MapSystem
 {
     public class MapManager : MonoBehaviour
     {
-        [SerializeField] private MiniMapInputSO Input;
+        [SerializeField] private MapInputSO Input;
         
         [SerializeField] private LayerMask chunkLayerMask;
         [SerializeField] private GridPlacement chunkPrefab;
@@ -45,13 +47,13 @@ namespace PSW._01.Code.MapSystem
         {
             if (_holdGrid != null)
             {
-                _holdGrid.transform.position = Input.MousePos;
+                _holdGrid.transform.position = MouseClass.GetScreenToWorldPos();
             }
         }
 
         private void HandleMouseDown()
         {
-            var cell = Physics2D.Raycast(Input.MousePos, Vector2.zero);
+            var cell = Physics2D.Raycast(MouseClass.GetScreenToWorldPos(), Vector2.zero);
             if (cell.collider != null)
             {
                 _holdGrid = cell.collider.GetComponent<GridPlacement>();
