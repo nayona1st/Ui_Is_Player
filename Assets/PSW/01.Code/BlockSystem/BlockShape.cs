@@ -1,6 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using _LumenLib.CoreSystem.EventChannelSystem.Runtime;
 using _LumenLib.ServiceLocator;
+using NKY.Script.AStar.Grid;
 using PSW._01.Code.CoreSystem;
 using UnityEngine;
 
@@ -8,6 +9,7 @@ namespace PSW._01.Code.BlockSystem
 {
     public class BlockShape : MonoBehaviour
     {
+        [SerializeField] private EventChannelSO evtChannel;
         [SerializeField] private List<BlockCell> blocks = new();
         [SerializeField] private LayerMask whatIsBlock;
 
@@ -55,6 +57,8 @@ namespace PSW._01.Code.BlockSystem
                 _canSnap = true;
                 Snapping();
             }
+            
+            evtChannel.RaiseEvent(BakeMapEvent.Instance);
 
             _followMouse = false;
             _lastPos = transform.position;

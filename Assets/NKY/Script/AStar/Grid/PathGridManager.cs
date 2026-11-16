@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using _LumenLib.CoreSystem.EventChannelSystem.Runtime;
 using NKY.Script.AStar.Core;
 using NKY.Script.AStar.Graph;
 using NKY.Script.AStar.Obstacle;
@@ -7,9 +9,17 @@ using UnityEngine.Tilemaps;
 
 namespace NKY.Script.AStar.Grid
 {
+    public class BakeMapEvent : GameEvent
+    {
+        public static BakeMapEvent Instance { get; private set; } = new();
+    }
+    
 public class PathGridManager : MonoBehaviour
     {
         public static PathGridManager Instance { get; private set; }
+        [Header("이벤트 채널")] 
+        [SerializeField] private EventChannelSO evtChannel;
+        
         [Header("Map Design")]
         [SerializeField] private Tilemap groundTilemap;
         [SerializeField] private List<BoxCollider2D> obstacleColliders;
@@ -55,7 +65,34 @@ public class PathGridManager : MonoBehaviour
             Debug.Log($"청크 생성 완료: {Grid.Chunks.Count}개");
         }
 
+        private void OnEnable()
+        {
+            evtChannel.AddListener<BakeMapEvent>(BakeMap);
+        }
+
+        private void OnDisable()
+        {
+            evtChannel.RemoveListener<BakeMapEvent>(BakeMap);
+        }
+
         public void BakeMap()
+        {
+            // BoxCollider2D 목록을 ObstacleBox 구조체 리스트로 변환
+            List<ObstacleBox> boxes = new List<ObstacleBox>();
+            foreach (var col in obstacleColliders)
+            {
+                if (col != null && col.enabled)
+                    boxes.Add(GraphAStar.FromCollider(col));
+            }
+
+            // Clearance 베이킹 수행
+            ClearanceMap = MapBaker.Bake(Grid, boxes, maxRadius);
+            
+            // 베이킹 결과를 그래프 프로바이더에 설정
+            GraphProvider.SetClearanceMap(ClearanceMap);
+        }
+        
+        private void BakeMap(BakeMapEvent evt)
         {
             // BoxCollider2D 목록을 ObstacleBox 구조체 리스트로 변환
             List<ObstacleBox> boxes = new List<ObstacleBox>();
