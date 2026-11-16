@@ -83,11 +83,6 @@ namespace NKY.Script
                 OnPathFailed?.Invoke();
                 return false;
             }
-
-            if (!goalNode.IsPassable)
-            {
-                
-            }
             
             List<IPathNode> path = _aStar.FindPath(startNode, goalNode, _cachedRadius);
 
