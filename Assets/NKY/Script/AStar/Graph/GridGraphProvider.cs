@@ -56,13 +56,13 @@ namespace NKY.Script.AStar.Graph
                 Vector2Int toPos = neighbor.NodeGridPos;
 
                 // Clearance 검사 (베이크 데이터가 없으면 기본 CanMove 사용)
-                /*if (_clearanceMap != null)
+                if (_clearanceMap != null)
                 {
                     if (!ClearanceLookup.CanTraverse(_clearanceMap, fromPos, toPos, radius))
                     {
                         continue;
                     }
-                }*/
+                }
 
                 if (TryGetCellNode(toPos, out CellPathNode neighborNode))
                     neighbors.Add(neighborNode);
