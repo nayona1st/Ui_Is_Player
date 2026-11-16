@@ -8,11 +8,11 @@ namespace NKY.Script.AStar.Graph
 {
     public class GraphAStar
     {
-        private readonly IPathGraphProvider _graph;
+        public readonly IPathGraphProvider Graph;
  
         public GraphAStar(IPathGraphProvider graph)
         {
-            _graph = graph ?? throw new ArgumentNullException(nameof(graph));
+            this.Graph = graph ?? throw new ArgumentNullException(nameof(graph));
         }
  
         public List<IPathNode> FindPath(IPathNode start, IPathNode goal, float radius)
@@ -56,12 +56,12 @@ namespace NKY.Script.AStar.Graph
                     break;
                 }
  
-                foreach (IPathNode neighbor in _graph.GetNeighbors(current, radius))
+                foreach (IPathNode neighbor in Graph.GetNeighbors(current, radius))
                 {
                     if (closedList.Contains(neighbor))
                         continue;
  
-                    float stepCost = _graph.GetCost(current, neighbor);
+                    float stepCost = Graph.GetCost(current, neighbor);
                     if (float.IsPositiveInfinity(stepCost))
                         continue;
  

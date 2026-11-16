@@ -13,7 +13,7 @@ namespace NKY.Script.AStar.Core
         public float NorthWestEdge; // (-1, +1)
     }
 
-    public class MapBaker
+    public static class MapBaker
     {
         private static readonly Vector2Int[] MainDirections = new Vector2Int[]
         {

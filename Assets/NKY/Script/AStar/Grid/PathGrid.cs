@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using NKY.Script.AStar.PathFind;
 using UnityEngine;
 
 namespace NKY.Script.AStar.Grid

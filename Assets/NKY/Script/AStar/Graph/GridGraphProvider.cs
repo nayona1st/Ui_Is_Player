@@ -33,7 +33,7 @@ namespace NKY.Script.AStar.Graph
 
             // 2. 그리드에 해당 셀이 존재하고 이동 가능한지 확인
             INode rawNode = _grid.GetNodeByGrid(gridPos);
-            if (rawNode != null && rawNode.CanMove)
+            if (rawNode is { CanMove: true })
             {
                 node = new CellPathNode(rawNode, _grid.GetChunkByGrid(gridPos), PathNodeIdIssuer.Issue());
                 _cellNodes[gridPos] = node; // 캐시 저장
@@ -56,11 +56,13 @@ namespace NKY.Script.AStar.Graph
                 Vector2Int toPos = neighbor.NodeGridPos;
 
                 // Clearance 검사 (베이크 데이터가 없으면 기본 CanMove 사용)
-                if (_clearanceMap != null)
+                /*if (_clearanceMap != null)
                 {
                     if (!ClearanceLookup.CanTraverse(_clearanceMap, fromPos, toPos, radius))
+                    {
                         continue;
-                }
+                    }
+                }*/
 
                 if (TryGetCellNode(toPos, out CellPathNode neighborNode))
                     neighbors.Add(neighborNode);

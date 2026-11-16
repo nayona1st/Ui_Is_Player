@@ -83,6 +83,11 @@ namespace NKY.Script
                 OnPathFailed?.Invoke();
                 return false;
             }
+
+            if (!goalNode.IsPassable)
+            {
+                
+            }
             
             List<IPathNode> path = _aStar.FindPath(startNode, goalNode, _cachedRadius);
 
@@ -131,16 +136,16 @@ namespace NKY.Script
             {
                 Vector3 scale = circle.transform.lossyScale;
                 float maxScale = Mathf.Max(Mathf.Abs(scale.x), Mathf.Abs(scale.y));
-                return circle.radius * maxScale;
+                return circle.radius * maxScale * 0.6f;
             }
 
             if (agentCollider != null)
             {
                 Vector3 extents = agentCollider.bounds.extents;
-                return Mathf.Max(extents.x, extents.y);
+                return Mathf.Max(extents.x, extents.y) * 0.6f;
             }
 
-            return 0.5f;
+            return 0.5f * 0.6f;
         }
 
         private void OnDrawGizmosSelected()

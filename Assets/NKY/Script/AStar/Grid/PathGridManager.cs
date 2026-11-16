@@ -61,7 +61,7 @@ public class PathGridManager : MonoBehaviour
             List<ObstacleBox> boxes = new List<ObstacleBox>();
             foreach (var col in obstacleColliders)
             {
-                if (col != null)
+                if (col != null && col.enabled)
                     boxes.Add(GraphAStar.FromCollider(col));
             }
 
