@@ -24,7 +24,10 @@ namespace NKY.Script
                 mousePos.z = -_cam.transform.position.z; 
                 Vector2 worldPos = _cam.ScreenToWorldPoint(mousePos);
 
-                pathAgent.SetDestination(worldPos);
+                if (pathAgent.SetDestination(worldPos))
+                {
+                    
+                }
             }
         }
     }

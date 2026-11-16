@@ -62,7 +62,6 @@ namespace NKY.Script
         
         public bool SetDestination(Vector2 destination)
         {
-            _cachedRadius = 0.05f;
             if (_gridManager == null || _gridManager.Grid == null)
             {
                 return false;
@@ -72,8 +71,8 @@ namespace NKY.Script
             {
                 _aStar = new GraphAStar(_gridManager.GraphProvider);
             }
-            
-            Vector2Int startGridPos = _gridManager.Grid.WorldToGrid(transform.position);
+
+            Vector2Int startGridPos = GetPathStartGridPos();
             Vector2Int goalGridPos = _gridManager.Grid.WorldToGrid(destination);
 
             if (!_gridManager.GraphProvider.TryGetCellNode(startGridPos, out CellPathNode startNode) ||
@@ -83,8 +82,11 @@ namespace NKY.Script
                 OnPathFailed?.Invoke();
                 return false;
             }
-            
-            List<IPathNode> path = _aStar.FindPath(startNode, goalNode, _cachedRadius);
+
+            // 시작 셀과 목표 셀이 같으면 A*가 빈 리스트를 반환하므로 노드 하나짜리 경로로 처리
+            List<IPathNode> path = startGridPos == goalGridPos
+                ? new List<IPathNode> { goalNode }
+                : _aStar.FindPath(startNode, goalNode, _cachedRadius);
 
             if (path == null || path.Count == 0)
             {
@@ -92,11 +94,24 @@ namespace NKY.Script
                 OnPathFailed?.Invoke();
                 return false;
             }
-            
+
             _currentPath = path;
             _currentPathIndex = 0;
             _isMoving = true;
             return true;
+        }
+
+// 이동 중이면 지금 향하고 있는 노드의 셀, 아니면 현재 위치의 셀
+        private Vector2Int GetPathStartGridPos()
+        {
+            if (_isMoving && _currentPath != null &&
+                _currentPathIndex < _currentPath.Count &&
+                _currentPath[_currentPathIndex] is CellPathNode heading)
+            {
+                return heading.SourceNode.NodeGridPos;
+            }
+
+            return _gridManager.Grid.WorldToGrid(transform.position);
         }
 
         public void StopMovement()
