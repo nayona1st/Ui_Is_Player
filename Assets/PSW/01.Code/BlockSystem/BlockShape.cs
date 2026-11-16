@@ -9,17 +9,19 @@ namespace PSW._01.Code.BlockSystem
     public class BlockShape : MonoBehaviour
     {
         [SerializeField] private List<BlockCell> blocks = new();
+        [SerializeField] private LayerMask whatIsBlock;
 
-        private Vector3 _lastTransform;
+        private Vector3 _lastPos;
         private bool _followMouse = false;
-
-        private bool _canSnap = true;
+        [SerializeField] private bool _canSnap = true;
 
         private void OnEnable()
         {
+            _lastPos = transform.position;
+            
             foreach (var block in blocks)
             {
-                block.OnTriggerEnter += HandleTriggerEnter;
+                block.OnTriggerStay += HandleTriggerStay;
                 block.OnTriggerExit += HandleTriggerExit;
             }
         }
@@ -28,7 +30,7 @@ namespace PSW._01.Code.BlockSystem
         {
             foreach (var block in blocks)
             {
-                block.OnTriggerEnter -= HandleTriggerEnter;
+                block.OnTriggerStay -= HandleTriggerStay;
                 block.OnTriggerExit -= HandleTriggerExit;
             }
         }
@@ -44,8 +46,39 @@ namespace PSW._01.Code.BlockSystem
             {
                 ServiceLocator.Get<BlockSnapper>().Snap(block.transform);
             }
+            
+            _canSnap = !CheckBlock();
+
+            if (!_canSnap)
+            {
+                transform.position = _lastPos;
+                _canSnap = true;
+                Snapping();
+            }
 
             _followMouse = false;
+            _lastPos = transform.position;
+        }
+        
+        private bool CheckBlock()
+        {
+            Physics2D.SyncTransforms();
+
+            foreach (var block in blocks)
+            {
+                var hits = Physics2D.OverlapPointAll(
+                    block.transform.position, whatIsBlock);
+
+                foreach (var hit in hits)
+                {
+                    var shape = hit.GetComponentInParent<BlockShape>();
+
+                    if (shape != null && shape != this)
+                        return true;
+                }
+            }
+
+            return false;
         }
 
         private void Update()
@@ -62,18 +95,18 @@ namespace PSW._01.Code.BlockSystem
 
         public void HoldBlock()
         {
-            _lastTransform = transform.position;
+            _lastPos = transform.position;
             _followMouse = true;
         }
 
-        private void HandleTriggerEnter()
+        private void HandleTriggerStay()
         {
-            _canSnap = false;
+            // _canSnap = false;
         }
 
         private void HandleTriggerExit()
         {
-            _canSnap = true;
+            // _canSnap = true;
         }
     }
 }

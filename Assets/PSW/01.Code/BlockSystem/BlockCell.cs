@@ -5,12 +5,12 @@ namespace PSW._01.Code.BlockSystem
 {
     public class BlockCell : MonoBehaviour
     {
-        public event Action OnTriggerEnter;
+        public event Action OnTriggerStay;
         public event Action OnTriggerExit;
-        
-        private void OnTriggerEnter2D(Collider2D other)
+
+        private void OnTriggerStay2D(Collider2D other)
         {
-            OnTriggerEnter?.Invoke();
+            OnTriggerStay?.Invoke();
         }
 
         private void OnTriggerExit2D(Collider2D other)

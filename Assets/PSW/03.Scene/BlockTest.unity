@@ -130,7 +130,8 @@ GameObject:
   - component: {fileID: 100409640}
   - component: {fileID: 100409642}
   - component: {fileID: 100409641}
-  m_Layer: 0
+  - component: {fileID: 100409643}
+  m_Layer: 6
   m_Name: Square
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -182,7 +183,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -257,6 +258,18 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &100409643
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100409639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7e4cec29e3a474b891894d789982344, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PSW._01.Code.BlockSystem.BlockCell
 --- !u!1 &197669016
 GameObject:
   m_ObjectHideFlags: 0
@@ -268,7 +281,8 @@ GameObject:
   - component: {fileID: 197669017}
   - component: {fileID: 197669019}
   - component: {fileID: 197669018}
-  m_Layer: 0
+  - component: {fileID: 197669020}
+  m_Layer: 6
   m_Name: Square (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -320,7 +334,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -395,6 +409,18 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &197669020
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 197669016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7e4cec29e3a474b891894d789982344, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PSW._01.Code.BlockSystem.BlockCell
 --- !u!1 &217473257
 GameObject:
   m_ObjectHideFlags: 0
@@ -406,7 +432,8 @@ GameObject:
   - component: {fileID: 217473258}
   - component: {fileID: 217473261}
   - component: {fileID: 217473259}
-  m_Layer: 0
+  - component: {fileID: 217473262}
+  m_Layer: 6
   m_Name: Square (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -458,7 +485,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -533,6 +560,18 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &217473262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 217473257}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7e4cec29e3a474b891894d789982344, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PSW._01.Code.BlockSystem.BlockCell
 --- !u!1 &377580401
 GameObject:
   m_ObjectHideFlags: 0
@@ -544,7 +583,8 @@ GameObject:
   - component: {fileID: 377580402}
   - component: {fileID: 377580404}
   - component: {fileID: 377580403}
-  m_Layer: 0
+  - component: {fileID: 377580405}
+  m_Layer: 6
   m_Name: Square (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -596,7 +636,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -671,6 +711,18 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &377580405
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 377580401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7e4cec29e3a474b891894d789982344, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PSW._01.Code.BlockSystem.BlockCell
 --- !u!1 &606301874
 GameObject:
   m_ObjectHideFlags: 0
@@ -682,6 +734,7 @@ GameObject:
   - component: {fileID: 606301877}
   - component: {fileID: 606301876}
   - component: {fileID: 606301875}
+  - component: {fileID: 606301878}
   m_Layer: 6
   m_Name: Block (1)
   m_TagString: Untagged
@@ -715,6 +768,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PSW._01.Code.BlockSystem.BlockShape
   blocks:
   - {fileID: 606301875}
+  - {fileID: 2112051874}
+  - {fileID: 857725248}
+  - {fileID: 217473262}
+  - {fileID: 1302218863}
+  whatIsBlock:
+    serializedVersion: 2
+    m_Bits: 64
+  _canSnap: 1
 --- !u!4 &606301877
 Transform:
   m_ObjectHideFlags: 0
@@ -734,6 +795,33 @@ Transform:
   - {fileID: 1302218859}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!50 &606301878
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 606301874}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &730657277
 GameObject:
   m_ObjectHideFlags: 0
@@ -745,7 +833,8 @@ GameObject:
   - component: {fileID: 730657278}
   - component: {fileID: 730657281}
   - component: {fileID: 730657279}
-  m_Layer: 0
+  - component: {fileID: 730657282}
+  m_Layer: 6
   m_Name: Square (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -797,7 +886,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -872,6 +961,18 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &730657282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 730657277}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7e4cec29e3a474b891894d789982344, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PSW._01.Code.BlockSystem.BlockCell
 --- !u!1 &755983017
 GameObject:
   m_ObjectHideFlags: 0
@@ -883,7 +984,8 @@ GameObject:
   - component: {fileID: 755983018}
   - component: {fileID: 755983019}
   - component: {fileID: 755983021}
-  m_Layer: 0
+  - component: {fileID: 755983022}
+  m_Layer: 6
   m_Name: Square
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -994,7 +1096,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -1010,6 +1112,18 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &755983022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 755983017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7e4cec29e3a474b891894d789982344, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PSW._01.Code.BlockSystem.BlockCell
 --- !u!1 &793829254
 GameObject:
   m_ObjectHideFlags: 0
@@ -1078,7 +1192,8 @@ GameObject:
   - component: {fileID: 857725244}
   - component: {fileID: 857725247}
   - component: {fileID: 857725245}
-  m_Layer: 0
+  - component: {fileID: 857725248}
+  m_Layer: 6
   m_Name: Square (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1130,7 +1245,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -1205,6 +1320,18 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &857725248
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 857725243}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7e4cec29e3a474b891894d789982344, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PSW._01.Code.BlockSystem.BlockCell
 --- !u!1 &859863960
 GameObject:
   m_ObjectHideFlags: 0
@@ -1216,7 +1343,8 @@ GameObject:
   - component: {fileID: 859863961}
   - component: {fileID: 859863964}
   - component: {fileID: 859863962}
-  m_Layer: 0
+  - component: {fileID: 859863965}
+  m_Layer: 6
   m_Name: Square (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1268,7 +1396,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -1343,6 +1471,18 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &859863965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 859863960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7e4cec29e3a474b891894d789982344, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PSW._01.Code.BlockSystem.BlockCell
 --- !u!1 &1227922585
 GameObject:
   m_ObjectHideFlags: 0
@@ -1354,6 +1494,7 @@ GameObject:
   - component: {fileID: 1227922586}
   - component: {fileID: 1227922587}
   - component: {fileID: 1227922588}
+  - component: {fileID: 1227922589}
   m_Layer: 6
   m_Name: Block
   m_TagString: Untagged
@@ -1394,6 +1535,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PSW._01.Code.BlockSystem.BlockShape
   blocks:
   - {fileID: 1227922588}
+  - {fileID: 755983022}
+  - {fileID: 859863965}
+  - {fileID: 730657282}
+  - {fileID: 1907339664}
+  whatIsBlock:
+    serializedVersion: 2
+    m_Bits: 64
+  _canSnap: 1
 --- !u!114 &1227922588
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1406,6 +1555,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7e4cec29e3a474b891894d789982344, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PSW._01.Code.BlockSystem.BlockCell
+--- !u!50 &1227922589
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1227922585}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &1302218858
 GameObject:
   m_ObjectHideFlags: 0
@@ -1417,7 +1593,8 @@ GameObject:
   - component: {fileID: 1302218859}
   - component: {fileID: 1302218862}
   - component: {fileID: 1302218860}
-  m_Layer: 0
+  - component: {fileID: 1302218863}
+  m_Layer: 6
   m_Name: Square (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1469,7 +1646,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -1544,6 +1721,18 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &1302218863
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1302218858}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7e4cec29e3a474b891894d789982344, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PSW._01.Code.BlockSystem.BlockCell
 --- !u!1 &1370949238
 GameObject:
   m_ObjectHideFlags: 0
@@ -1555,6 +1744,7 @@ GameObject:
   - component: {fileID: 1370949241}
   - component: {fileID: 1370949240}
   - component: {fileID: 1370949239}
+  - component: {fileID: 1370949242}
   m_Layer: 6
   m_Name: Block (2)
   m_TagString: Untagged
@@ -1588,6 +1778,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PSW._01.Code.BlockSystem.BlockShape
   blocks:
   - {fileID: 1370949239}
+  - {fileID: 100409643}
+  - {fileID: 1813057129}
+  - {fileID: 197669020}
+  - {fileID: 377580405}
+  whatIsBlock:
+    serializedVersion: 2
+    m_Bits: 64
+  _canSnap: 1
 --- !u!4 &1370949241
 Transform:
   m_ObjectHideFlags: 0
@@ -1607,6 +1805,33 @@ Transform:
   - {fileID: 377580402}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!50 &1370949242
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1370949238}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &1706261464
 GameObject:
   m_ObjectHideFlags: 0
@@ -1666,7 +1891,8 @@ GameObject:
   - component: {fileID: 1813057126}
   - component: {fileID: 1813057128}
   - component: {fileID: 1813057127}
-  m_Layer: 0
+  - component: {fileID: 1813057129}
+  m_Layer: 6
   m_Name: Square (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1718,7 +1944,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -1793,6 +2019,18 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &1813057129
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1813057125}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7e4cec29e3a474b891894d789982344, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PSW._01.Code.BlockSystem.BlockCell
 --- !u!1 &1848901943
 GameObject:
   m_ObjectHideFlags: 0
@@ -1932,7 +2170,8 @@ GameObject:
   - component: {fileID: 1907339660}
   - component: {fileID: 1907339663}
   - component: {fileID: 1907339661}
-  m_Layer: 0
+  - component: {fileID: 1907339664}
+  m_Layer: 6
   m_Name: Square (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1984,7 +2223,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -2059,6 +2298,18 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &1907339664
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1907339659}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7e4cec29e3a474b891894d789982344, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PSW._01.Code.BlockSystem.BlockCell
 --- !u!1 &2112051869
 GameObject:
   m_ObjectHideFlags: 0
@@ -2070,7 +2321,8 @@ GameObject:
   - component: {fileID: 2112051873}
   - component: {fileID: 2112051872}
   - component: {fileID: 2112051871}
-  m_Layer: 0
+  - component: {fileID: 2112051874}
+  m_Layer: 6
   m_Name: Square
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2107,7 +2359,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -2197,6 +2449,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 606301877}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2112051874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2112051869}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7e4cec29e3a474b891894d789982344, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PSW._01.Code.BlockSystem.BlockCell
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
