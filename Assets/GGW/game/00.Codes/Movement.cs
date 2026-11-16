@@ -1,25 +1,57 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using GGW.game._00.Codes.Traps;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Movement : MonoBehaviour
+namespace GGW.game._00.Codes
 {
-    [SerializeField]private float speed = 5f;
-    private Rigidbody2D rb;
-    private Vector2 moveDir;
-
-    private void Awake()
+    public class Movement : MonoBehaviour
     {
-        rb = GetComponent<Rigidbody2D>();
-    }
+        [SerializeField] private SlowTrap trapEvent;
 
-    private void FixedUpdate()
-    {
-        rb.linearVelocity = moveDir.normalized * speed;
-    }
+        private Rigidbody2D _rb;
+        private Vector2 _moveDir;
+        public float speed = 5f;
 
-    private void OnMove(InputValue value)
-    {
-        moveDir = value.Get<Vector2>();
+        private void Awake()
+        {
+            _rb = GetComponent<Rigidbody2D>();
+        }
+
+        private void OnEnable()
+        {
+            trapEvent.Trapped += StartSlowTr;
+        }
+
+        private void OnDisable()
+        {
+            trapEvent.Trapped -= StartSlowTr;
+        }
+
+        private void FixedUpdate()
+        {
+            _rb.linearVelocity = _moveDir.normalized * speed;
+        }
+
+        private void OnMove(InputValue value)
+        {
+            _moveDir = value.Get<Vector2>();
+        }
+        
+        private IEnumerator SlowTr()
+        {
+            speed *= 0.75f;
+            Debug.Log("둔화");
+            yield return new WaitForSeconds(4f);
+            speed = 5f;
+            Debug.Log("둔화제거");
+        }
+
+        private void StartSlowTr()
+        {
+            StartCoroutine(SlowTr());
+        }
     }
 }
