@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using _LumenLib.ModuleSystem;
 using NKY.Script.AStar.Core;
 using NKY.Script.AStar.Graph;
 using NKY.Script.AStar.Grid;
@@ -8,22 +9,24 @@ using UnityEngine;
 
 namespace NKY.Script.Agent
 {
-[RequireComponent(typeof(Collider2D))]
-    public class PathAgent : MonoBehaviour
-    {
-        [Header("References")] 
-        [SerializeField] private Collider2D agentCollider;
+    public class PathAgent : MonoModule
+    { 
 
         [Header("Movement Settings")]
-        [SerializeField] private float moveSpeed = 5f;
+        [field: SerializeField] public float MoveSpeed { get; private set; } = 5f;
         [SerializeField] private float nodeReachThreshold = 0.05f;
 
+        private Collider2D _agentCollider;
+        private Transform _ownerTrm;
         private float _cachedRadius;
         private GraphAStar _aStar;
+        
 
         private List<IPathNode> _currentPath = new();
         private int _currentPathIndex;
         private bool _isMoving;
+        
+        public float CurrentSpeed { get; private set; }
 
         public bool IsMoving => _isMoving;
         public event Action OnDestinationReached;
@@ -31,13 +34,23 @@ namespace NKY.Script.Agent
         
         private PathGridManager _gridManager;
 
+        public override void Initialize(ModuleOwner owner)
+        {
+            base.Initialize(owner);
+            _ownerTrm = owner.transform;
+            _agentCollider = _ownerTrm.GetComponent<Collider2D>();
+            if(_agentCollider == null)
+                Debug.LogWarning("owner collider not found");
+        }
+
         private void Awake()
         {
-            if (agentCollider == null)
-                agentCollider = GetComponent<Collider2D>();
+            if (_agentCollider == null)
+                _agentCollider = GetComponent<Collider2D>();
 
             _cachedRadius = CalculateWorldRadius();
             _gridManager = PathGridManager.Instance;
+            CurrentSpeed = MoveSpeed;
         }
 
         private void Start()
@@ -57,6 +70,16 @@ namespace NKY.Script.Agent
                 return;
 
             MoveAlongPath();
+        }
+
+        public void SetSpeed(float speed)
+        {
+            CurrentSpeed = speed;
+        }
+
+        public void InitSpeed()
+        {
+            CurrentSpeed = MoveSpeed;
         }
         
         public bool SetDestination(Vector2 destination)
@@ -110,7 +133,7 @@ namespace NKY.Script.Agent
                 return heading.SourceNode.NodeGridPos;
             }
 
-            return _gridManager.Grid.WorldToGrid(transform.position);
+            return _gridManager.Grid.WorldToGrid(_ownerTrm.position);
         }
 
         public void StopMovement()
@@ -123,11 +146,11 @@ namespace NKY.Script.Agent
         private void MoveAlongPath()
         {
             Vector2 targetWorldPos = _currentPath[_currentPathIndex].WorldPosition;
-            Vector2 currentPos = transform.position;
+            Vector2 currentPos = _ownerTrm.position;
             
-            transform.position = Vector2.MoveTowards(currentPos, targetWorldPos, moveSpeed * Time.deltaTime);
+            _ownerTrm.position = Vector2.MoveTowards(currentPos, targetWorldPos, CurrentSpeed * Time.deltaTime);
             
-            if (Vector2.Distance(transform.position, targetWorldPos) <= nodeReachThreshold)
+            if (Vector2.Distance(_ownerTrm.position, targetWorldPos) <= nodeReachThreshold)
             {
                 _currentPathIndex++;
 
@@ -141,16 +164,16 @@ namespace NKY.Script.Agent
 
         private float CalculateWorldRadius()
         {
-            if (agentCollider is CircleCollider2D circle)
+            if (_agentCollider is CircleCollider2D circle)
             {
                 Vector3 scale = circle.transform.lossyScale;
                 float maxScale = Mathf.Max(Mathf.Abs(scale.x), Mathf.Abs(scale.y));
                 return circle.radius * maxScale * 0.6f;
             }
 
-            if (agentCollider != null)
+            if (_agentCollider != null)
             {
-                Vector3 extents = agentCollider.bounds.extents;
+                Vector3 extents = _agentCollider.bounds.extents;
                 return Mathf.Max(extents.x, extents.y) * 0.6f;
             }
 

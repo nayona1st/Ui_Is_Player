@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using _LumenLib.ModuleSystem;
 using NKY.Script.Agent;
 using Unity.Behavior;
@@ -16,7 +17,7 @@ public partial class ChaseTargetAction : Action
     private ModuleOwner _owner;
     private GameObject _target;
     
-    private AgentMovementModule _moveModule;
+    private PathAgent _moveModule;
 
     protected override Status OnStart()
     {
@@ -26,7 +27,7 @@ public partial class ChaseTargetAction : Action
         if(_owner == null)
             return Status.Failure;
         
-        _moveModule = _owner.GetModule<AgentMovementModule>();
+        _moveModule = _owner.GetModule<PathAgent>();
         if(_moveModule == null)
             return Status.Failure;
         
