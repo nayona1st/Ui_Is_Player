@@ -1,48 +1,69 @@
+using System;
+using DG.Tweening;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace GGW.game._00.Codes
 {
     public class Vent : MonoBehaviour
     {
-        [SerializeField] private Transform[] vents;
-        [SerializeField] private Vector2 ventRaySize;
+        [SerializeField] private Vent targetVent;
+        [SerializeField] private float cooltime = 2f;
 
-        private bool onceChange = false;
-        private float _boolTimer;
+        public event Action<Vent, Vent, IUseVentable> OnTeleported;
+
+        private bool _canTeleport = true;
+        private IUseVentable _currentUser;
+
+        public bool CanUse => _canTeleport && targetVent != null;
 
         private void Update()
         {
-            _boolTimer += Time.deltaTime;
-            foreach (Transform t in vents)
-            {
-                var hit = Physics2D.OverlapBox((Vector2)t.position,new Vector2(ventRaySize.x,ventRaySize.y),0);
-                if (hit != null && t == vents[0] && !onceChange)
-                {
-                    onceChange = true;
-                    hit.gameObject.transform.position = vents[1].position;
-                }
-                if (hit != null && t == vents[1] && !onceChange)
-                {
-                    onceChange = true;
-                    hit.gameObject.transform.position = vents[0].position;
-                }
-            }
+            if (!CanUse || _currentUser == null) return;
 
-            if (_boolTimer >= 2f)
+            if (Keyboard.current.eKey.wasPressedThisFrame)
             {
-                onceChange = false;
-                _boolTimer = 0f;
+                UseCurrentVent();
             }
-        
         }
 
-        private void OnDrawGizmos()
+        private void UseCurrentVent()
         {
-            Gizmos.color = Color.yellow;
-            foreach (Transform t in vents)
+            IUseVentable user = _currentUser;
+            _currentUser = null;
+            
+            user.UseVent(targetVent.transform);
+            StartCooldown();
+
+            if (targetVent.targetVent != null)
             {
-                Gizmos.DrawWireCube(t.position,ventRaySize);
+                targetVent.StartCooldown();
             }
+
+            OnTeleported?.Invoke(this, targetVent, user);
+        }
+
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            if (other.TryGetComponent(out IUseVentable useVent))
+            {
+                _currentUser = useVent;
+            }
+        }
+
+        private void OnTriggerExit2D(Collider2D other)
+        {
+            if (other.TryGetComponent(out IUseVentable useVent) && _currentUser == useVent)
+            {
+                _currentUser = null;
+            }
+        }
+
+        public void StartCooldown()
+        {
+            _canTeleport = false;
+            DOVirtual.DelayedCall(cooltime, () => _canTeleport = true)
+                     .SetLink(gameObject);
         }
     }
 }

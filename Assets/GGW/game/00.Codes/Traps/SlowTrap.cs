@@ -6,12 +6,13 @@ namespace GGW.game._00.Codes.Traps
 {
    public class SlowTrap : Trap
    {
-
-      public Action Trapped;
+      [SerializeField, Range(0f, 1f)] private float speedMultiplier;
+      [SerializeField, Min(0f)] private float duration;
       
-      public override void OnTrapped()
+      public override void OnTrapped(GameObject target)
       {
-         Trapped?.Invoke();
+         if(target.TryGetComponent(out ISlowable slowable))
+            slowable.Slowed(speedMultiplier, duration);
       }
 
       
