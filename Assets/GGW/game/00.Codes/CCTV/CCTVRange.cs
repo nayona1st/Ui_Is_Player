@@ -5,22 +5,31 @@ namespace GGW.game._00.Codes.CCTV
 {
     public class CctvRange : MonoBehaviour
     {
-        [Range(0,360)]float fov = 60f;
+        [Range(0,360)] private float fov = 60f;
         private int raycastCount = 50;
         private  float viewDistance = 5f;
-        private float coolTime = 1f;
+        private float coolTime = 0.2f;
     
         private Mesh mesh;
     
         private bool isIn = true;
+
+        public bool IsFinding { get; private set; } = false;
     
     
-        public Action<Transform> _findPlayer;
+        public event Action<Transform> FindPlayer;
+
+        public void InitRange(float fovRange, float distance)
+        {
+            fov = fovRange;
+            viewDistance = distance;
+        }
 
         private void Start()
         {
             mesh = new Mesh();
             GetComponent<MeshFilter>().mesh = mesh;
+            SetFinding(true);
         }
 
         private void Update()
@@ -33,15 +42,24 @@ namespace GGW.game._00.Codes.CCTV
             }
         }
 
+        public void SetFinding(bool isFind)
+        {
+            IsFinding = isFind;
+        }
+
         private void LateUpdate()
         {
+
+            if(!IsFinding) return;
+            
             DrawFov();
         }
 
 
         private void DrawFov()
         {
-            float angle = fov / 0.5f;
+            Debug.Log("fov");   
+            float angle = fov * 0.5f;
             float angleIncrease = fov / raycastCount;
 
             Vector3[] vertices = new Vector3[raycastCount + 1 + 1];
@@ -57,6 +75,7 @@ namespace GGW.game._00.Codes.CCTV
                 Vector3 vertex;
                 RaycastHit2D hit2D =Physics2D.Raycast(transform.position,
                     UtilsClass.GetVectorFromAngle(transform.eulerAngles.z + angle), viewDistance);
+
                 if (hit2D.collider == null)
                 {
                     vertex = UtilsClass.GetVectorFromAngle(angle) * viewDistance;
@@ -65,10 +84,10 @@ namespace GGW.game._00.Codes.CCTV
                 {
                     if (hit2D.collider.CompareTag("Player") && isIn)
                     {
-                        _findPlayer?.Invoke(hit2D.collider.transform);
+                        FindPlayer?.Invoke(hit2D.collider.transform);
                         isIn = false;
                     }
-                    vertex = UtilsClass.GetVectorFromAngle(angle) * (hit2D.distance / viewDistance) * viewDistance;
+                    vertex = UtilsClass.GetVectorFromAngle(angle) * ((hit2D.distance / viewDistance) * viewDistance);
                 }
                 vertices[vertexIndex] = vertex;
                 if (i > 0)

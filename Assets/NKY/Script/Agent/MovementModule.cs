@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace NKY.Script.Agent
 {
-    public class PathAgent : MonoModule
+    public class MovementModule : MonoModule
     { 
 
         [Header("Movement Settings")]

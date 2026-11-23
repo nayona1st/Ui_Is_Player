@@ -5,11 +5,11 @@ namespace NKY.Script.Agent
 {
     public abstract class AbstractAgent : ModuleOwner
     {
-        protected PathAgent MoveModule {get; private set;}
+        protected MovementModule MoveModule {get; private set;}
         protected override void InitModule()
         {
             base.InitModule();
-            MoveModule = GetModule<PathAgent>();
+            MoveModule = GetModule<MovementModule>();
         }
     }
 }

@@ -17,7 +17,7 @@ public partial class ChaseTargetAction : Action
     private ModuleOwner _owner;
     private GameObject _target;
     
-    private PathAgent _moveModule;
+    private MovementModule _moveModule;
 
     protected override Status OnStart()
     {
@@ -27,7 +27,7 @@ public partial class ChaseTargetAction : Action
         if(_owner == null)
             return Status.Failure;
         
-        _moveModule = _owner.GetModule<PathAgent>();
+        _moveModule = _owner.GetModule<MovementModule>();
         if(_moveModule == null)
             return Status.Failure;
         

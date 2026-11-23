@@ -14,7 +14,7 @@ public partial class MoveToPointAction : Action
     [SerializeReference] public BlackboardVariable<Vector2> Point;
 
     private ModuleOwner _owner;
-    private PathAgent _moveModule;
+    private MovementModule _moveModule;
 
     private Vector2 _endPosition;
 
@@ -23,7 +23,7 @@ public partial class MoveToPointAction : Action
         if(!Self.Value.TryGetComponent(out _owner))
             return Status.Failure;
         
-        _moveModule = _owner.GetModule<PathAgent>();
+        _moveModule = _owner.GetModule<MovementModule>();
         
         if(_moveModule == null)
             return Status.Failure;

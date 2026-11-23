@@ -19,12 +19,12 @@ namespace GGW.game._00.Codes.CCTV
 
         private void OnEnable()
         {
-            _range._findPlayer += PlayerTrmAlarm;
+            _range.FindPlayer += PlayerTrmAlarm;
         }
 
         private void OnDisable()
         {
-            _range._findPlayer -= PlayerTrmAlarm;
+            _range.FindPlayer -= PlayerTrmAlarm;
         }
 
         private void PlayerTrmAlarm(Transform target)

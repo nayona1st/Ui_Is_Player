@@ -30,7 +30,7 @@ namespace PSW._01.Code.BlockSystem
         {
             var block = Physics2D.Raycast(MouseClass.GetScreenToWorldPos(), Vector2.zero, whatIsBlock);
 
-            if (CheckBlock(block, out BlockShape blockShape))
+            if (block && CheckBlock(block, out BlockShape blockShape))
             {
                 _holdingBlock = blockShape;
                 _holdingBlock.HoldBlock();

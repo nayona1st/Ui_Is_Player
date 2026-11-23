@@ -10,18 +10,18 @@ namespace NKY.Script.Agent
     {
         [field:SerializeField] public EventChannelSO AlarmEvent { get; private set; }
         
-        private BehaviorGraphAgent _behaviorAgent;
+        public BehaviorGraphAgent BehaviorAgent {get; private set;}
         
         private BlackboardVariable<ChangeStateEvent> changeEvent;
 
         protected override void Awake()
         {
             base.Awake();
-            _behaviorAgent = GetComponent<BehaviorGraphAgent>();
+            BehaviorAgent = GetComponent<BehaviorGraphAgent>();
             
             AlarmEvent.AddListener<AlarmEvent>(Listen);
             
-            _behaviorAgent.BlackboardReference.GetVariable(
+            BehaviorAgent.BlackboardReference.GetVariable(
                 "ChangeEvent",
                 out changeEvent
             );
@@ -29,8 +29,8 @@ namespace NKY.Script.Agent
 
         public void Listen(AlarmEvent evt)
         {
-            _behaviorAgent.SetVariableValue("State", PoliceState.SEARCH);
-            _behaviorAgent.SetVariableValue("SearchPosition", evt.TargetPos);
+            BehaviorAgent.SetVariableValue("State", PoliceState.SEARCH);
+            BehaviorAgent.SetVariableValue("SearchPosition", evt.TargetPos);
             changeEvent.Value.SendEventMessage(PoliceState.SEARCH);
         }
     }
