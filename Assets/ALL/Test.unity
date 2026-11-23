@@ -663,7 +663,6 @@ GameObject:
   - component: {fileID: 366612357}
   - component: {fileID: 366612356}
   - component: {fileID: 366612355}
-  - component: {fileID: 366612354}
   m_Layer: 0
   m_Name: Alarm
   m_TagString: Objects
@@ -686,18 +685,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1860188957}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &366612354
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 366612352}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26f7b4a98e1a4c34ba2769b2e4d5b8ac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GGW.game._00.Codes.Traps.Alarm
 --- !u!114 &366612355
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -710,6 +697,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26f7b4a98e1a4c34ba2769b2e4d5b8ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Alarm
+  alarmEvent: {fileID: 11400000, guid: e17a9dc0dbd427d4d982a821a088198f, type: 2}
 --- !u!61 &366612356
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1225,8 +1213,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3b9ed8947844df42b8f6fcb581c72ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GGW.game._00.Codes.Vent
-  targetVent: {fileID: 1431606457}
-  cooldown: 2
+  targetVent: {fileID: 1431606459}
+  cooltime: 2
 --- !u!61 &973303257
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2021,6 +2009,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4f873e5b65543daa309ec2b04a1707b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NKY.Script.Agent.TestPlayer
+  <AlarmEvent>k__BackingField: {fileID: 11400000, guid: e17a9dc0dbd427d4d982a821a088198f, type: 2}
 --- !u!114 &1131803708
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2070,7 +2059,7 @@ MonoBehaviour:
           m_Value0: 14446303868622029222
           m_Value1: 11731094952417922104
         Name: DetectRange
-        m_Value: 15
+        m_Value: 0
     - rid: 6139612841573089356
       type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
@@ -2078,7 +2067,7 @@ MonoBehaviour:
           m_Value0: 8639127228501005148
           m_Value1: 7518751095725778411
         Name: OutDetectRange
-        m_Value: 20
+        m_Value: 0
     - rid: 6139612841573089357
       type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
@@ -2320,6 +2309,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09584aa19009479ea228736d92188009, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GGW.game._00.Codes.CCTV
+  findEvent: {fileID: 11400000, guid: e17a9dc0dbd427d4d982a821a088198f, type: 2}
 --- !u!212 &1224563573
 SpriteRenderer:
   serializedVersion: 2
@@ -2771,8 +2761,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3b9ed8947844df42b8f6fcb581c72ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GGW.game._00.Codes.Vent
-  targetVent: {fileID: 973303254}
-  cooldown: 2
+  targetVent: {fileID: 973303256}
+  cooltime: 2
 --- !u!61 &1431606460
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3109,7 +3099,7 @@ GameObject:
   - component: {fileID: 2052391562}
   m_Layer: 0
   m_Name: Square
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5368,6 +5358,10 @@ PrefabInstance:
     - target: {fileID: 4154312782233619159, guid: 56bcda9a28d20a84887e06a38fad9201, type: 3}
       propertyPath: m_Name
       value: MoveModule
+      objectReference: {fileID: 0}
+    - target: {fileID: 7692621711044633037, guid: 56bcda9a28d20a84887e06a38fad9201, type: 3}
+      propertyPath: <MoveSpeed>k__BackingField
+      value: 2.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
