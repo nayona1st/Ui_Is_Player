@@ -9,6 +9,7 @@ namespace NKY.Script.BT
 		PATROL,
 		CHASE,
 		STUN,
-		CATCH
+		CATCH,
+		SEARCH
 	}
 }
