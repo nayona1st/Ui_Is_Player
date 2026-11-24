@@ -7,6 +7,7 @@ namespace PSW._01.Code.BlockSystem
     [CreateAssetMenu(fileName = "MiniMap Input", menuName = "So/Map/Input", order = 0)]
     public class MapInputSO : ScriptableObject, MapControls.IPlayerActions
     {
+        public event Action OnRotateInput;
         public event Action OnMouseDown;
         public event Action OnMouseUp;
         
@@ -37,6 +38,12 @@ namespace PSW._01.Code.BlockSystem
                 OnMouseDown?.Invoke();
             if(context.canceled)
                 OnMouseUp?.Invoke();
+        }
+
+        public void OnRotate(InputAction.CallbackContext context)
+        {
+            if(context.performed)
+                OnRotateInput?.Invoke();
         }
     }
 }

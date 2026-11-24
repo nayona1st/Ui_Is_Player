@@ -10,21 +10,14 @@ namespace PSW._01.Code.BlockSystem
         private void Awake()
         {
             _grid = GetComponent<Grid>();
-        }
 
-        #region Enable/Disable
-
-        public void OnEnable()
-        {
             ServiceLocator.Register<BlockSnapper>(this);
         }
 
-        public void OnDisable()
+        private void OnDestroy()
         {
             ServiceLocator.Unregister<BlockSnapper>(this);
         }
-
-        #endregion
 
         private void Place(Transform target, Vector3Int cell)
         {
@@ -36,6 +29,13 @@ namespace PSW._01.Code.BlockSystem
         {
             Vector3Int cell = _grid.WorldToCell(target.position);
             Place(target, cell);
+        }
+
+        public Vector2 GetCellSize()
+        {
+            if (_grid == null) _grid = GetComponent<Grid>();
+
+            return _grid.cellSize;
         }
     }
 }
