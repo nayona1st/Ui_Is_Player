@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using _LumenLib.CoreSystem.EventChannelSystem.Runtime;
 using _LumenLib.ServiceLocator;
-using NKY.Script.AStar.Grid;
 using PSW._01.Code.CoreSystem;
 using UnityEngine;
 
@@ -9,19 +7,39 @@ namespace PSW._01.Code.BlockSystem
 {
     public class BlockShape : MonoBehaviour
     {
-        [SerializeField] private EventChannelSO evtChannel;
-        [SerializeField] private List<BlockCell> blocks = new();
+        [SerializeField] private BlockDataSO blockData;
         [SerializeField] private LayerMask whatIsBlock;
 
+        [SerializeField, HideInInspector] private List<BlockCell> _blocks = new();
         private Vector3 _lastPos;
         private bool _followMouse = false;
-        [SerializeField] private bool _canSnap = true;
+        private bool _canSnap = true;
+        private float _cellSize = 1;
+
+        public void InitCell()
+        {
+            InitCell(ServiceLocator.Get<BlockSnapper>().GetCellSize().x);
+        }
+
+        public void InitCell(float cellSize)
+        {
+            _blocks.Add(GetComponent<BlockCell>());
+
+            _cellSize = cellSize;
+
+            foreach (var cell in blockData.cells)
+            {
+                BlockCell newCell = Instantiate(cell.cellPrefab, transform);
+                newCell.transform.localPosition = cell.cellPos * _cellSize;
+                _blocks.Add(newCell);
+            }
+        }
 
         private void OnEnable()
         {
             _lastPos = transform.position;
             
-            foreach (var block in blocks)
+            foreach (var block in _blocks)
             {
                 block.OnTriggerStay += HandleTriggerStay;
                 block.OnTriggerExit += HandleTriggerExit;
@@ -30,7 +48,7 @@ namespace PSW._01.Code.BlockSystem
 
         private void OnDisable()
         {
-            foreach (var block in blocks)
+            foreach (var block in _blocks)
             {
                 block.OnTriggerStay -= HandleTriggerStay;
                 block.OnTriggerExit -= HandleTriggerExit;
@@ -44,7 +62,7 @@ namespace PSW._01.Code.BlockSystem
 
         public void Snapping()
         {
-            foreach (var block in blocks)
+            foreach (var block in _blocks)
             {
                 ServiceLocator.Get<BlockSnapper>().Snap(block.transform);
             }
@@ -57,8 +75,6 @@ namespace PSW._01.Code.BlockSystem
                 _canSnap = true;
                 Snapping();
             }
-            
-            evtChannel.RaiseEvent(BakeMapEvent.Instance);
 
             _followMouse = false;
             _lastPos = transform.position;
@@ -68,7 +84,7 @@ namespace PSW._01.Code.BlockSystem
         {
             Physics2D.SyncTransforms();
 
-            foreach (var block in blocks)
+            foreach (var block in _blocks)
             {
                 var hits = Physics2D.OverlapPointAll(
                     block.transform.position, whatIsBlock);
