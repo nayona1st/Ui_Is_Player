@@ -9,6 +9,7 @@ namespace NKY.Script.Agent
     public class TestPolice : AbstractAgent, IListenAlarmable
     {
         [field:SerializeField] public EventChannelSO AlarmEvent { get; private set; }
+        [field:SerializeField] public LayerMask TargetLayer { get; private set; }
         
         public BehaviorGraphAgent BehaviorAgent {get; private set;}
         

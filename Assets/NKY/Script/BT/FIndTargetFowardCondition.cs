@@ -1,6 +1,7 @@
 using System;
 using _LumenLib.ModuleSystem;
 using GGW.game._00.Codes.CCTV;
+using NKY.Script.Agent;
 using Unity.Behavior;
 using UnityEngine;
 
@@ -12,7 +13,7 @@ public partial class FIndTargetFowardCondition : Condition
     [SerializeReference] public BlackboardVariable<float> Range;
     [SerializeReference] public BlackboardVariable<float> Pov;
     
-    private ModuleOwner _owner;
+    private TestPolice _owner;
     
     private CctvRange _cctvRange;
 
@@ -27,7 +28,7 @@ public partial class FIndTargetFowardCondition : Condition
     {
         _isSuccess = false;
         
-        _owner = Self.Value.GetComponent<ModuleOwner>();
+        _owner = Self.Value.GetComponent<TestPolice>();
 
         if (_owner == null)
             return;
@@ -37,9 +38,9 @@ public partial class FIndTargetFowardCondition : Condition
         if (_cctvRange == null)
             return;
         
-        _cctvRange.InitRange(Pov.Value, Range.Value);
+        _cctvRange.InitRange(Pov.Value, Range.Value, _owner.TargetLayer);
         _cctvRange.FindPlayer += FindingTarget;
-        _cctvRange.SetFinding(true);
+        _cctvRange.DrawFov();
     }
 
     public override void OnEnd()
@@ -47,7 +48,6 @@ public partial class FIndTargetFowardCondition : Condition
         if (_cctvRange == null)
             return;
         
-        _cctvRange.SetFinding(false);
         _cctvRange.FindPlayer -= FindingTarget;
         _isSuccess = false;
     }

@@ -5,60 +5,52 @@ namespace GGW.game._00.Codes.CCTV
 {
     public class CctvRange : MonoBehaviour
     {
-        [Range(0,360)] private float fov = 60f;
-        private int raycastCount = 50;
-        private  float viewDistance = 5f;
-        private float coolTime = 0.2f;
-    
+        [SerializeField] private LayerMask obstacleLayer;
+        [SerializeField] private float coolTime = 0.2f;
+        [SerializeField, Range(0,360)] private float fov = 60f;
+        [SerializeField] private  float viewDistance = 5f;
+        [SerializeField] private int raycastCount = 50;
+        
+        private LayerMask _targetLayer;
         private Mesh mesh;
-    
         private bool isIn = true;
-
-        public bool IsFinding { get; private set; } = false;
-    
-    
+        private float curCoolTime;
+        
         public event Action<Transform> FindPlayer;
 
-        public void InitRange(float fovRange, float distance)
+        public void InitRange(float fovRange, float distance, LayerMask targetLayer)
         {
             fov = fovRange;
             viewDistance = distance;
+            _targetLayer = targetLayer;
         }
 
         private void Start()
         {
             mesh = new Mesh();
             GetComponent<MeshFilter>().mesh = mesh;
-            SetFinding(true);
+            curCoolTime = coolTime;
         }
 
         private void Update()
         {
-            coolTime -= Time.deltaTime;
-            if (coolTime <= 0)
+            curCoolTime -= Time.deltaTime;
+            if (curCoolTime <= 0)
             {
                 isIn = true;
-                coolTime = 1f;
+                curCoolTime = coolTime;
             }
-        }
-
-        public void SetFinding(bool isFind)
-        {
-            IsFinding = isFind;
         }
 
         private void LateUpdate()
         {
-
-            if(!IsFinding) return;
-            
             DrawFov();
         }
 
 
-        private void DrawFov()
+        public void DrawFov()
         {
-            Debug.Log("fov");   
+            LayerMask fovLayer = obstacleLayer | _targetLayer;
             float angle = fov * 0.5f;
             float angleIncrease = fov / raycastCount;
 
@@ -70,24 +62,32 @@ namespace GGW.game._00.Codes.CCTV
         
             int vertexIndex = 1;
             int trianglesIndex = 0;
+            
             for (int i = 0; i <= raycastCount; i++)
             {
                 Vector3 vertex;
-                RaycastHit2D hit2D =Physics2D.Raycast(transform.position,
-                    UtilsClass.GetVectorFromAngle(transform.eulerAngles.z + angle), viewDistance);
-
-                if (hit2D.collider == null)
+                
+                Vector2 origin = transform.position;
+                Vector2 direction = UtilsClass.GetVectorFromAngle(transform.eulerAngles.z + angle).normalized;
+                
+                RaycastHit2D hit = Physics2D.Raycast(origin, direction, viewDistance, fovLayer);
+                
+                bool hitSomething = hit.collider != null;
+                
+                if (!hitSomething)
                 {
                     vertex = UtilsClass.GetVectorFromAngle(angle) * viewDistance;
                 }
                 else
                 {
-                    if (hit2D.collider.CompareTag("Player") && isIn)
+                    bool isTarget = (_targetLayer.value & (1 << hit.collider.gameObject.layer)) != 0;
+                    
+                    if (isTarget && isIn)
                     {
-                        FindPlayer?.Invoke(hit2D.collider.transform);
+                        FindPlayer?.Invoke(hit.collider.transform);
                         isIn = false;
                     }
-                    vertex = UtilsClass.GetVectorFromAngle(angle) * ((hit2D.distance / viewDistance) * viewDistance);
+                    vertex = UtilsClass.GetVectorFromAngle(angle) * ((hit.distance / viewDistance) * viewDistance);
                 }
                 vertices[vertexIndex] = vertex;
                 if (i > 0)
