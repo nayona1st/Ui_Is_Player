@@ -1,7 +1,6 @@
-using System.Collections.Generic;
 using _LumenLib.ServiceLocator;
+using System.Collections.Generic;
 using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -14,6 +13,7 @@ namespace PSW._01.Code.BlockSystem.Editor
     {
         private const string BlockDataPropName = "blockData";
         private const string WhatIsBlockPropName = "whatIsBlock";
+        private const string InitCellUndoName = "Init Cell";
 
         private SerializedProperty _blockDataProp;
         private Button _initCellButton;
@@ -55,10 +55,8 @@ namespace PSW._01.Code.BlockSystem.Editor
             _initCellButton = new Button(OnClickInitCell)
             {
                 text = "Init Cell",
-                tooltip = "InitCell()을 1회 호출합니다.\n" +
-                          "Block Data의 cells 목록대로 셀 프리팹을 자식으로 생성하고 " +
-                          "BlockSnapper의 셀 크기에 맞춰 배치합니다.\n" +
-                          "(Block Data가 비어 있으면 호출되지 않습니다)"
+                tooltip = "기존 블록 셀과 목록을 정리하고 Block Data에 맞춰 다시 생성합니다.\n" +
+                          "새 셀은 BlockSnapper의 셀 크기에 맞게 배치합니다."
             };
             _initCellButton.style.height = 26;
             _initCellButton.style.marginTop = 4;
@@ -110,45 +108,102 @@ namespace PSW._01.Code.BlockSystem.Editor
             }
 
             float cellSize = snapper.GetCellSize().x;
+            bool recordUndo = !Application.isPlaying;
+            int undoGroup = 0;
 
-            Undo.SetCurrentGroupName("Init Cell");
-            int undoGroup = Undo.GetCurrentGroup();
-
-            foreach (Object t in targets)
+            if (recordUndo)
             {
-                if (t is not BlockShape shape) continue;
+                Undo.IncrementCurrentGroup();
+                Undo.SetCurrentGroupName(InitCellUndoName);
+                undoGroup = Undo.GetCurrentGroup();
+            }
 
-                // 버튼을 누른 시점에 blockData가 null이면 호출하지 않음
-                var so = new SerializedObject(shape);
-                if (so.FindProperty(BlockDataPropName).objectReferenceValue == null)
+            try
+            {
+                foreach (Object t in targets)
                 {
-                    Debug.LogWarning($"[BlockShapeEditor] '{shape.name}'의 Block Data가 null이라 InitCell()을 호출하지 않았습니다.", shape);
-                    continue;
+                    if (t is BlockShape shape)
+                        TryRebuildCells(shape, cellSize, recordUndo);
                 }
+            }
+            finally
+            {
+                if (recordUndo) Undo.CollapseUndoOperations(undoGroup);
+            }
+        }
 
-                var before = new HashSet<Transform>();
-                foreach (Transform child in shape.transform) before.Add(child);
+        private static void TryRebuildCells(BlockShape shape, float cellSize, bool recordUndo)
+        {
+            if (EditorUtility.IsPersistent(shape))
+            {
+                Debug.LogWarning("Open the prefab in Prefab Mode to initialize its cells.", shape);
+                return;
+            }
 
-                if (!Application.isPlaying)
-                    Undo.RecordObject(shape, "Init Cell");
+            var data = shape.BlockData;
+            if (data == null || data.cells == null) return;
+            foreach (var cell in data.cells)
+            {
+                if (cell.cellPrefab == null) return;
+            }
 
-                shape.InitCell(cellSize);
+            var oldCells = new List<GameObject>();
+            foreach (Transform child in shape.transform)
+            {
+                if (child.TryGetComponent<BlockCell>(out _) && !child.TryGetComponent<BlockShape>(out _))
+                    oldCells.Add(child.gameObject);
+            }
 
-                if (!Application.isPlaying)
+            if (recordUndo)
+            {
+                if (!RemoveCellsWithUndo(shape, oldCells)) return;
+            }
+            else
+            {
+                foreach (var oldCell in oldCells)
                 {
-                    foreach (Transform child in shape.transform)
-                    {
-                        if (!before.Contains(child))
-                            Undo.RegisterCreatedObjectUndo(child.gameObject, "Init Cell");
-                    }
-
-                    var scene = shape.gameObject.scene;
-                    if (scene.IsValid() && !EditorSceneManager.IsPreviewScene(scene))
-                        EditorSceneManager.MarkSceneDirty(scene);
+                    oldCell.SetActive(false);
+                    Object.Destroy(oldCell);
                 }
             }
 
-            Undo.CollapseUndoOperations(undoGroup);
+            var newCells = new List<BlockCell>(data.cells.Length + 1);
+            if (shape.TryGetComponent<BlockCell>(out var rootCell))
+                newCells.Add(rootCell);
+
+            foreach (var cell in data.cells)
+            {
+                var newCell = Object.Instantiate(cell.cellPrefab, shape.transform);
+                newCell.transform.localPosition = cell.cellPos * cellSize;
+                if (recordUndo) Undo.RegisterCreatedObjectUndo(newCell.gameObject, InitCellUndoName);
+                newCells.Add(newCell);
+            }
+
+            shape.SetCells(newCells);
+            if (recordUndo && PrefabUtility.IsPartOfPrefabInstance(shape))
+                PrefabUtility.RecordPrefabInstancePropertyModifications(shape);
+        }
+
+        private static bool RemoveCellsWithUndo(BlockShape shape, IReadOnlyList<GameObject> oldCells)
+        {
+            var prefabRoot = PrefabUtility.GetOutermostPrefabInstanceRoot(shape.gameObject);
+            foreach (var oldCell in oldCells)
+            {
+                if (prefabRoot == null ||
+                    PrefabUtility.GetOutermostPrefabInstanceRoot(oldCell) != prefabRoot ||
+                    PrefabUtility.IsAddedGameObjectOverride(oldCell)) continue;
+
+                Debug.LogWarning("Rebuild inherited cells on their source prefab in Prefab Mode.", shape);
+                return false;
+            }
+
+            Undo.RegisterCompleteObjectUndo(shape, InitCellUndoName);
+            foreach (var oldCell in oldCells)
+            {
+                Undo.DestroyObjectImmediate(oldCell);
+            }
+
+            return true;
         }
     }
 }

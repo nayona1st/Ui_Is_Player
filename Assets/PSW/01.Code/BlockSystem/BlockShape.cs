@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using _LumenLib.ServiceLocator;
 using PSW._01.Code.CoreSystem;
+using TMPro;
+using Unity.Android.Gradle;
 using UnityEngine;
 
 namespace PSW._01.Code.BlockSystem
@@ -12,44 +14,52 @@ namespace PSW._01.Code.BlockSystem
 
         [SerializeField, HideInInspector] private List<BlockCell> _blocks = new();
         private Vector3 _lastPos;
+        private Quaternion _lastRotation;
         private bool _followMouse = false;
         private bool _canSnap = true;
-        private float _cellSize = 1;
 
-        public void InitCell()
+        public BlockDataSO BlockData => blockData;
+
+        public void SetCells(IEnumerable<BlockCell> cells)
         {
-            InitCell(ServiceLocator.Get<BlockSnapper>().GetCellSize().x);
-        }
+            bool updateSubscriptions = Application.isPlaying && isActiveAndEnabled;
+            if (updateSubscriptions) UnsubscribeFromCells();
 
-        public void InitCell(float cellSize)
-        {
-            _blocks.Add(GetComponent<BlockCell>());
+            _blocks.Clear();
+            _blocks.AddRange(cells);
 
-            _cellSize = cellSize;
-
-            foreach (var cell in blockData.cells)
-            {
-                BlockCell newCell = Instantiate(cell.cellPrefab, transform);
-                newCell.transform.localPosition = cell.cellPos * _cellSize;
-                _blocks.Add(newCell);
-            }
+            if (updateSubscriptions) SubscribeToCells();
         }
 
         private void OnEnable()
         {
             _lastPos = transform.position;
-            
+            _lastRotation  = transform.rotation;
+            SubscribeToCells();
+        }
+
+        private void OnDisable()
+        {
+            UnsubscribeFromCells();
+        }
+
+        private void SubscribeToCells()
+        {
             foreach (var block in _blocks)
             {
+                if (block == null) continue;
+
                 block.OnTriggerStay += HandleTriggerStay;
                 block.OnTriggerExit += HandleTriggerExit;
             }
         }
 
-        private void OnDisable()
+        private void UnsubscribeFromCells()
         {
             foreach (var block in _blocks)
             {
+                if (block == null) continue;
+
                 block.OnTriggerStay -= HandleTriggerStay;
                 block.OnTriggerExit -= HandleTriggerExit;
             }
@@ -66,14 +76,16 @@ namespace PSW._01.Code.BlockSystem
             {
                 ServiceLocator.Get<BlockSnapper>().Snap(block.transform);
             }
-            
+
             _canSnap = !CheckBlock();
 
             if (!_canSnap)
             {
                 transform.position = _lastPos;
+                transform.rotation = _lastRotation;
                 _canSnap = true;
-                Snapping();
+                _followMouse = false;
+                return;
             }
 
             _followMouse = false;
@@ -116,6 +128,8 @@ namespace PSW._01.Code.BlockSystem
         public void HoldBlock()
         {
             _lastPos = transform.position;
+            _lastRotation = transform.rotation;
+            
             _followMouse = true;
         }
 
