@@ -1,6 +1,8 @@
 using System;
 using System.IO;
+using System.Threading;
 using _LumenLib.ModuleSystem;
+using Cysharp.Threading.Tasks;
 using NKY.Script.Agent;
 using Unity.Behavior;
 using UnityEngine;
@@ -16,8 +18,9 @@ public partial class ChaseTargetAction : Action
 
     private ModuleOwner _owner;
     private GameObject _target;
-    
     private MovementModule _moveModule;
+
+    private CancellationTokenSource _cts;
 
     protected override Status OnStart()
     {
@@ -31,9 +34,18 @@ public partial class ChaseTargetAction : Action
         if(_moveModule == null)
             return Status.Failure;
         
-        Vector2 targetPos =  _target.transform.position;
-        if(!_moveModule.SetDestination(targetPos))
-            return Status.Failure;
+        if (_cts != null)
+        {
+            CleanupCts();
+        }
+        
+        _cts = new CancellationTokenSource();
+        
+        _cts = CancellationTokenSource.CreateLinkedTokenSource(
+            _owner.GetCancellationTokenOnDestroy()
+        );
+        
+        _moveModule.TargetChaseDestination(_target, _cts.Token).Forget();
         
         return Status.Running;
     }
@@ -46,9 +58,11 @@ public partial class ChaseTargetAction : Action
         Vector2 targetPos =  _target.transform.position;
         
         float distance = Vector2.Distance(selfPos, targetPos);
-        
-        if(distance < 0.5f)
+
+        if (distance < 0.5f)
+        {
             return Status.Success;
+        }
         
         return Status.Running;
     }
@@ -56,8 +70,19 @@ public partial class ChaseTargetAction : Action
     protected override void OnEnd()
     {
         if (_moveModule == null) return;
-        
+
+        CleanupCts();
         _moveModule.StopMovement();
+    }
+    
+    private void CleanupCts()
+    {
+        if (_cts != null)
+        {
+            _cts.Cancel();
+            _cts.Dispose();
+            _cts = null;
+        }
     }
 }
 

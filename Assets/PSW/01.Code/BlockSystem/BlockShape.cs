@@ -2,7 +2,6 @@
 using _LumenLib.ServiceLocator;
 using PSW._01.Code.CoreSystem;
 using TMPro;
-using Unity.Android.Gradle;
 using UnityEngine;
 
 namespace PSW._01.Code.BlockSystem

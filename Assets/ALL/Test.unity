@@ -855,6 +855,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MoveModule
       objectReference: {fileID: 0}
+    - target: {fileID: 7692621711044633037, guid: 56bcda9a28d20a84887e06a38fad9201, type: 3}
+      propertyPath: <MoveSpeed>k__BackingField
+      value: 15
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -959,17 +963,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f894911d0da14290a4b29190624a2cb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PSW._01.Code.BlockSystem.BlockShape
-  evtChannel: {fileID: 11400000, guid: 67f563e6172514c468db779d68f5bd36, type: 2}
-  blocks:
-  - {fileID: 556634677}
-  - {fileID: 204302613}
-  - {fileID: 1040444608}
-  - {fileID: 1299893838}
-  - {fileID: 999475189}
+  blockData: {fileID: 0}
   whatIsBlock:
     serializedVersion: 2
     m_Bits: 64
-  _canSnap: 1
+  _blocks: []
 --- !u!1 &873902354
 GameObject:
   m_ObjectHideFlags: 0
@@ -2179,7 +2177,7 @@ MonoBehaviour:
           m_Value0: 14446303868622029222
           m_Value1: 11731094952417922104
         Name: DetectRange
-        m_Value: 8
+        m_Value: 4
     - rid: 6139612841573089356
       type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
@@ -2187,7 +2185,7 @@ MonoBehaviour:
           m_Value0: 8639127228501005148
           m_Value1: 7518751095725778411
         Name: OutDetectRange
-        m_Value: 12
+        m_Value: 5
     - rid: 6139612841573089357
       type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
@@ -2270,15 +2268,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: NKY.Astar::NKY.Script.AStar.Grid.PathGridManager
   evtChannel: {fileID: 11400000, guid: 67f563e6172514c468db779d68f5bd36, type: 2}
   groundTilemap: {fileID: 2095039942}
-  obstacleColliders:
-  - {fileID: 204302612}
-  - {fileID: 1040444607}
-  - {fileID: 1299893837}
-  - {fileID: 999475188}
-  - {fileID: 1037408587}
-  - {fileID: 1112749294}
-  - {fileID: 114816720}
-  - {fileID: 186126495}
+  obstacleColliders: []
   originTrm: {fileID: 2095039940}
   sellSize: 1
   chunkSizeX: 16
@@ -2625,7 +2615,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1252984418
 Transform:
   m_ObjectHideFlags: 0
@@ -3332,7 +3322,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1634233706
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3345,6 +3335,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5480a863813e46109fb481872c6beedd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PSW._01.Code.BlockSystem.BlockController
+  evtChannel: {fileID: 0}
   input: {fileID: 11400000, guid: cc5ceaa9ea1c9974fad72c98ae2551f5, type: 2}
   whatIsBlock:
     serializedVersion: 2
@@ -3522,7 +3513,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1860188957
 Transform:
   m_ObjectHideFlags: 0
@@ -3632,17 +3623,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f894911d0da14290a4b29190624a2cb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PSW._01.Code.BlockSystem.BlockShape
-  evtChannel: {fileID: 11400000, guid: 67f563e6172514c468db779d68f5bd36, type: 2}
-  blocks:
-  - {fileID: 1979906713}
-  - {fileID: 1037408588}
-  - {fileID: 1112749295}
-  - {fileID: 114816721}
-  - {fileID: 186126496}
+  blockData: {fileID: 0}
   whatIsBlock:
     serializedVersion: 2
     m_Bits: 64
-  _canSnap: 1
+  _blocks: []
 --- !u!1 &2052391558
 GameObject:
   m_ObjectHideFlags: 0

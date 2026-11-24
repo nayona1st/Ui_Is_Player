@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using _LumenLib.ModuleSystem;
+using Cysharp.Threading.Tasks;
 using NKY.Script.AStar.Core;
 using NKY.Script.AStar.Graph;
 using NKY.Script.AStar.Grid;
@@ -13,11 +15,14 @@ namespace NKY.Script.Agent
     { 
 
         [Header("Movement Settings")]
+        [Tooltip("초당 회전할수 있는 각도")]
+        [SerializeField] private float rotationSpeed = 720f;
         [field: SerializeField] public float MoveSpeed { get; private set; } = 5f;
         [SerializeField] private float nodeReachThreshold = 0.05f;
 
         private Collider2D _agentCollider;
         private Transform _ownerTrm;
+        private Rigidbody2D _ownerRb;
         private float _cachedRadius;
         private GraphAStar _aStar;
         
@@ -38,7 +43,8 @@ namespace NKY.Script.Agent
         {
             base.Initialize(owner);
             _ownerTrm = owner.transform;
-            _agentCollider = _ownerTrm.GetComponent<Collider2D>();
+            _ownerRb = owner.GetComponent<Rigidbody2D>();
+            _agentCollider = owner.GetComponent<Collider2D>();
             if(_agentCollider == null)
                 Debug.LogWarning("owner collider not found");
         }
@@ -64,9 +70,10 @@ namespace NKY.Script.Agent
             }
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
-            if (!_isMoving || _currentPath == null || _currentPathIndex >= _currentPath.Count)
+            if (!_isMoving || _currentPath == null ||
+                _currentPathIndex >= _currentPath.Count)
                 return;
 
             MoveAlongPath();
@@ -80,6 +87,21 @@ namespace NKY.Script.Agent
         public void InitSpeed()
         {
             CurrentSpeed = MoveSpeed;
+        }
+
+        public async UniTaskVoid TargetChaseDestination(GameObject target, CancellationToken token)
+        {
+            while (!token.IsCancellationRequested && target != null)
+            {
+                if(!SetDestination(target.transform.position))
+                    break;
+
+                // Cancel() 호출 시 예외를 던지는 대신 bool 값으로 반환받음
+                bool isCanceled = await UniTask.Delay(300, cancellationToken: token).SuppressCancellationThrow();
+        
+                if (isCanceled)
+                    break;
+            }
         }
         
         public bool SetDestination(Vector2 destination)
@@ -139,27 +161,58 @@ namespace NKY.Script.Agent
         public void StopMovement()
         {
             _isMoving = false;
+            _ownerRb.linearVelocity = Vector2.zero;
             _currentPathIndex = 0;
             _currentPath?.Clear();
         }
-
+        
         private void MoveAlongPath()
         {
             Vector2 targetWorldPos = _currentPath[_currentPathIndex].WorldPosition;
             Vector2 currentPos = _ownerTrm.position;
+
+            Vector2 direction = targetWorldPos - currentPos;
+            float distance = direction.magnitude;
             
-            _ownerTrm.position = Vector2.MoveTowards(currentPos, targetWorldPos, CurrentSpeed * Time.deltaTime);
+            float moveDistance = CurrentSpeed * Time.fixedDeltaTime;
             
-            if (Vector2.Distance(_ownerTrm.position, targetWorldPos) <= nodeReachThreshold)
+
+            if (distance <= nodeReachThreshold + moveDistance)
             {
+                _ownerTrm.position = targetWorldPos;
+
                 _currentPathIndex++;
 
                 if (_currentPathIndex >= _currentPath.Count)
                 {
                     _isMoving = false;
+                    _ownerRb.linearVelocity = Vector2.zero;
                     OnDestinationReached?.Invoke();
                 }
+
+                return;
             }
+            RotateTowards(direction);
+            _ownerRb.linearVelocity = direction.normalized * CurrentSpeed;
+        }
+        
+        private void RotateTowards(Vector2 direction)
+        {
+            if (direction.sqrMagnitude < 0.01f)
+                return;
+
+            float targetAngle = Mathf.Atan2(direction.y, direction.x)
+                                * Mathf.Rad2Deg;
+
+            float currentAngle = _ownerRb.rotation;
+
+            float nextAngle = Mathf.MoveTowardsAngle(
+                currentAngle,
+                targetAngle,
+                rotationSpeed * Time.fixedDeltaTime
+            );
+
+            _ownerRb.MoveRotation(nextAngle);
         }
 
         private float CalculateWorldRadius()
