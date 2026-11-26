@@ -23,6 +23,7 @@ public class PathGridManager : MonoBehaviour
         [Header("Map Design")]
         [SerializeField] private Tilemap groundTilemap;
         [SerializeField] private List<BoxCollider2D> obstacleColliders;
+        [field: SerializeField] public List<Transform> PatrolPoints { get; private set; }
         
         [Header("Map Setting")]
         [Tooltip("그리드 기준 (0, 0)의 위치할 트랜스폼")]

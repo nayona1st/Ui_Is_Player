@@ -30,6 +30,10 @@ namespace NKY.Script.Agent
 
         public void Listen(AlarmEvent evt)
         {
+            BehaviorAgent.GetVariable("State",  out BlackboardVariable<PoliceState> state);
+            if(state.Value == PoliceState.CATCH || state.Value == PoliceState.CHASE)
+                return;
+            
             BehaviorAgent.SetVariableValue("State", PoliceState.SEARCH);
             BehaviorAgent.SetVariableValue("SearchPosition", evt.TargetPos);
             changeEvent.Value.SendEventMessage(PoliceState.SEARCH);

@@ -11,6 +11,14 @@ using UnityEngine;
 
 namespace NKY.Script.Agent
 {
+    public enum MovementState
+    {
+        Idle,
+        Moving,
+        Arrived,
+        PathFailed
+    }
+    
     public class MovementModule : MonoModule
     { 
 
@@ -25,13 +33,14 @@ namespace NKY.Script.Agent
         private Rigidbody2D _ownerRb;
         private float _cachedRadius;
         private GraphAStar _aStar;
-        
-
         private List<IPathNode> _currentPath = new();
         private int _currentPathIndex;
         private bool _isMoving;
+        private Vector2 _destination;
+        private bool _hasDestination;
         
         public float CurrentSpeed { get; private set; }
+        public MovementState State { get; private set; }
 
         public bool IsMoving => _isMoving;
         public event Action OnDestinationReached;
@@ -89,16 +98,27 @@ namespace NKY.Script.Agent
             CurrentSpeed = MoveSpeed;
         }
 
-        public async UniTaskVoid TargetChaseDestination(GameObject target, CancellationToken token)
+        public async UniTaskVoid TargetChaseDestination(
+            GameObject target, CancellationToken token)
         {
+            Vector2Int lastTargetCell = new Vector2Int(int.MinValue, int.MinValue);
+
             while (!token.IsCancellationRequested && target != null)
             {
-                if(!SetDestination(target.transform.position))
-                    break;
+                Vector2Int currentTargetCell = _gridManager.Grid.WorldToGrid(target.transform.position);
 
-                // Cancel() 호출 시 예외를 던지는 대신 bool 값으로 반환받음
-                bool isCanceled = await UniTask.Delay(300, cancellationToken: token).SuppressCancellationThrow();
-        
+                bool targetMoved = currentTargetCell != lastTargetCell;
+                bool pathFailed = State == MovementState.PathFailed;
+
+                if (targetMoved || pathFailed)
+                {
+                    SetDestination(target.transform.position);
+                    lastTargetCell = currentTargetCell;
+                }
+
+                bool isCanceled = await UniTask.Delay(100, cancellationToken: token)
+                    .SuppressCancellationThrow();
+
                 if (isCanceled)
                     break;
             }
@@ -106,46 +126,70 @@ namespace NKY.Script.Agent
         
         public bool SetDestination(Vector2 destination)
         {
-            if (_gridManager == null || _gridManager.Grid == null)
-            {
+            _destination = destination;
+            _hasDestination = true;
+
+            return RefreshDestination();
+        }
+
+        public bool RefreshDestination()
+        {
+            if (!_hasDestination || _gridManager == null ||
+                _gridManager.Grid == null)
                 return false;
-            }
 
             if (_aStar == null)
-            {
                 _aStar = new GraphAStar(_gridManager.GraphProvider);
-            }
 
-            Vector2Int startGridPos = GetPathStartGridPos();
-            Vector2Int goalGridPos = _gridManager.Grid.WorldToGrid(destination);
+            StopPathOnly();
 
-            if (!_gridManager.GraphProvider.TryGetCellNode(startGridPos, out CellPathNode startNode) ||
-                !_gridManager.GraphProvider.TryGetCellNode(goalGridPos, out CellPathNode goalNode))
+            Vector2Int startGridPos =
+                _gridManager.Grid.WorldToGrid(_ownerTrm.position);
+
+            Vector2Int goalGridPos =
+                _gridManager.Grid.WorldToGrid(_destination);
+
+            if (!_gridManager.GraphProvider.TryGetCellNode(
+                    startGridPos, out CellPathNode startNode) ||
+                !_gridManager.GraphProvider.TryGetCellNode(
+                    goalGridPos, out CellPathNode goalNode))
             {
-                StopMovement();
+                State = MovementState.PathFailed;
                 OnPathFailed?.Invoke();
                 return false;
             }
 
-            // 시작 셀과 목표 셀이 같으면 A*가 빈 리스트를 반환하므로 노드 하나짜리 경로로 처리
             List<IPathNode> path = startGridPos == goalGridPos
                 ? new List<IPathNode> { goalNode }
                 : _aStar.FindPath(startNode, goalNode, _cachedRadius);
-
+            
             if (path == null || path.Count == 0)
             {
-                StopMovement();
+                State = MovementState.PathFailed;
                 OnPathFailed?.Invoke();
                 return false;
+            }
+            if (path.Count > 1)
+            {
+                Vector2Int firstNodeGridPos =
+                    _gridManager.Grid.WorldToGrid(path[0].WorldPosition);
+
+                if (firstNodeGridPos == startGridPos)
+                {
+                    path.RemoveAt(0);
+                }
             }
 
             _currentPath = path;
             _currentPathIndex = 0;
+
             _isMoving = true;
+            State = MovementState.Moving;
+
             return true;
         }
 
-// 이동 중이면 지금 향하고 있는 노드의 셀, 아니면 현재 위치의 셀
+        // 이동 중이면 지금 향하고 있는 노드의 셀, 아니면 현재 위치의 셀
         private Vector2Int GetPathStartGridPos()
         {
             if (_isMoving && _currentPath != null &&
@@ -157,13 +201,21 @@ namespace NKY.Script.Agent
 
             return _gridManager.Grid.WorldToGrid(_ownerTrm.position);
         }
-
-        public void StopMovement()
+        
+        private void StopPathOnly()
         {
             _isMoving = false;
             _ownerRb.linearVelocity = Vector2.zero;
             _currentPathIndex = 0;
-            _currentPath?.Clear();
+            _currentPath.Clear();
+        }
+
+        public void StopMovement()
+        {
+            StopPathOnly();
+
+            _hasDestination = false;
+            State = MovementState.Idle;
         }
         
         private void MoveAlongPath()
@@ -187,6 +239,10 @@ namespace NKY.Script.Agent
                 {
                     _isMoving = false;
                     _ownerRb.linearVelocity = Vector2.zero;
+
+                    State = MovementState.Arrived;
+                    _hasDestination = false;
+
                     OnDestinationReached?.Invoke();
                 }
 

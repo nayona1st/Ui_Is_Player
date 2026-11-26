@@ -39,8 +39,6 @@ public partial class ChaseTargetAction : Action
             CleanupCts();
         }
         
-        _cts = new CancellationTokenSource();
-        
         _cts = CancellationTokenSource.CreateLinkedTokenSource(
             _owner.GetCancellationTokenOnDestroy()
         );
@@ -52,6 +50,7 @@ public partial class ChaseTargetAction : Action
 
     protected override Status OnUpdate()
     {
+        if(_target == null) return Status.Failure;
         if(_moveModule == null) return Status.Failure;
         
         Vector2 selfPos =  _owner.transform.position;
