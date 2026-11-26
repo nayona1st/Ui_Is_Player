@@ -10,6 +10,7 @@ namespace NKY.Script.Agent
     {
         [field:SerializeField] public EventChannelSO AlarmEvent { get; private set; }
         [field:SerializeField] public LayerMask TargetLayer { get; private set; }
+        [field:SerializeField] public EventChannelSO CatchEvent { get; private set; }
         
         public BehaviorGraphAgent BehaviorAgent {get; private set;}
         

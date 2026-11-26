@@ -17,6 +17,8 @@ namespace GGW.game._00.Codes.CCTV
         private bool isIn = true;
         private float curCoolTime;
         
+        public Transform CurrentTarget {get; private set;}
+        
         public bool HasTarget { get; private set; }
         public float LastDetectTime { get; private set; } = float.NegativeInfinity;
         
@@ -89,14 +91,13 @@ namespace GGW.game._00.Codes.CCTV
                     
                     if (isTarget)
                     {
-                        // "지금 보이는가" 상태 + 감지 시각: 쓰로틀(isIn)과 무관하게 갱신
                         HasTarget = true;
                         LastDetectTime = Time.time;
-
-                        // 이벤트 발사만 쓰로틀 대상
+                        
                         if (isIn)
                         {
-                            FindPlayer?.Invoke(hit.collider.transform);
+                            CurrentTarget = hit.collider.transform;
+                            FindPlayer?.Invoke(CurrentTarget);
                             isIn = false;
                         }
                     }
@@ -115,6 +116,9 @@ namespace GGW.game._00.Codes.CCTV
                 ++vertexIndex;
                 angle -= angleIncrease;
             }
+
+            if (isIn)
+                CurrentTarget = null;
         
             mesh.vertices = vertices;
             mesh.triangles = triangles;

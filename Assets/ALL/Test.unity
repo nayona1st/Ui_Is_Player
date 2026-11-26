@@ -2269,6 +2269,7 @@ MonoBehaviour:
   <TargetLayer>k__BackingField:
     serializedVersion: 2
     m_Bits: 8
+  <CatchEvent>k__BackingField: {fileID: 11400000, guid: b02ff6b59cbcaf34bb2c8b2f29870005, type: 2}
 --- !u!114 &1131803708
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2311,7 +2312,7 @@ MonoBehaviour:
           m_Value0: 13563143287963725904
           m_Value1: 3302679707869769111
         Name: TargetGo
-        m_Value: {fileID: 2052391558}
+        m_Value: {fileID: 0}
     - rid: 6139612841573089355
       type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
@@ -2319,7 +2320,7 @@ MonoBehaviour:
           m_Value0: 14446303868622029222
           m_Value1: 11731094952417922104
         Name: DetectRange
-        m_Value: 4
+        m_Value: 6
     - rid: 6139612841573089356
       type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
@@ -2327,7 +2328,7 @@ MonoBehaviour:
           m_Value0: 8639127228501005148
           m_Value1: 7518751095725778411
         Name: OutDetectTime
-        m_Value: 2
+        m_Value: 2.5
     - rid: 6139612841573089357
       type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
@@ -2335,7 +2336,7 @@ MonoBehaviour:
           m_Value0: 6968693451771386429
           m_Value1: 8486838519848644815
         Name: CatchRange
-        m_Value: 0
+        m_Value: 1.3
     - rid: 6139612841573089358
       type: {class: 'BlackboardVariable`1[[ChangeStateEvent, Assembly-CSharp]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
@@ -3291,6 +3292,51 @@ Transform:
   - {fileID: 1431606457}
   m_Father: {fileID: 1860188957}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1744721022
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1744721023}
+  - component: {fileID: 1744721024}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1744721023
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1744721022}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.12071, y: 0.91406, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1744721024
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1744721022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f1a521b874a49b7bdad5fd3778d7c65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NKY.Script.TestCatch
+  catchEventChannel: {fileID: 11400000, guid: b02ff6b59cbcaf34bb2c8b2f29870005, type: 2}
 --- !u!1 &1860188956
 GameObject:
   m_ObjectHideFlags: 0
@@ -5767,3 +5813,4 @@ SceneRoots:
   - {fileID: 1131803706}
   - {fileID: 2052391560}
   - {fileID: 1860188957}
+  - {fileID: 1744721023}
