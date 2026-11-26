@@ -6,12 +6,13 @@ using Unity.Behavior;
 using UnityEngine;
 
 [Serializable, Unity.Properties.GeneratePropertyBag]
-[Condition(name: "FIndTargetFoward", story: "Find [Self] in [Range] and [pov]", category: "Conditions", id: "7b4957a00eb45e8975b502d2c8bf97c4")]
+[Condition(name: "FIndTargetFoward", story: "Find [Self] in [Range] and [pov] out [TargetGo]", category: "Conditions", id: "7b4957a00eb45e8975b502d2c8bf97c4")]
 public partial class FIndTargetFowardCondition : Condition
 {
     [SerializeReference] public BlackboardVariable<GameObject> Self;
     [SerializeReference] public BlackboardVariable<float> Range;
     [SerializeReference] public BlackboardVariable<float> Pov;
+    [SerializeReference] public BlackboardVariable<GameObject> TargetGo;
     
     private TestPolice _owner;
     
@@ -29,11 +30,13 @@ public partial class FIndTargetFowardCondition : Condition
 
         _cctvRange = _owner.GetComponentInChildren<CctvRange>();
         if (_cctvRange == null) return;
-
-        Debug.Log("FindTarget on start");
+        
         _cctvRange.InitRange(Pov.Value, Range.Value, _owner.TargetLayer);
-        _cctvRange.DrawFov();
+        TargetGo.Value = _cctvRange.CurrentTarget?.gameObject;
     }
 
-    public override void OnEnd() { }
+    public override void OnEnd()
+    {
+        
+    }
 }

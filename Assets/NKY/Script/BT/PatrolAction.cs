@@ -89,7 +89,6 @@ public partial class PatrolAction : Action
     {
         if (_moveModule == null) return;
         
-        Debug.Log("PatrolAction.OnEnd");
         _moveModule.StopMovement();
     }
 }
