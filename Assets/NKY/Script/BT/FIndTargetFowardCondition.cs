@@ -17,43 +17,23 @@ public partial class FIndTargetFowardCondition : Condition
     
     private CctvRange _cctvRange;
 
-    private bool _isSuccess = false;
-
     public override bool IsTrue()
     {
-        return _isSuccess;
+        return _cctvRange != null && _cctvRange.HasTarget;
     }
 
     public override void OnStart()
     {
-        _isSuccess = false;
-        
         _owner = Self.Value.GetComponent<TestPolice>();
+        if (_owner == null) return;
 
-        if (_owner == null)
-            return;
-        
         _cctvRange = _owner.GetComponentInChildren<CctvRange>();
+        if (_cctvRange == null) return;
 
-        if (_cctvRange == null)
-            return;
-        
+        Debug.Log("FindTarget on start");
         _cctvRange.InitRange(Pov.Value, Range.Value, _owner.TargetLayer);
-        _cctvRange.FindPlayer += FindingTarget;
         _cctvRange.DrawFov();
     }
 
-    public override void OnEnd()
-    {
-        if (_cctvRange == null)
-            return;
-        
-        _cctvRange.FindPlayer -= FindingTarget;
-        _isSuccess = false;
-    }
-
-    public void FindingTarget(Transform target)
-    {
-        _isSuccess = true;
-    }
+    public override void OnEnd() { }
 }

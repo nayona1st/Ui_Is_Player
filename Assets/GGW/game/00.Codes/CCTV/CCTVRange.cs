@@ -1,4 +1,5 @@
 using System;
+using NUnit.Framework;
 using UnityEngine;
 
 namespace GGW.game._00.Codes.CCTV
@@ -7,7 +8,7 @@ namespace GGW.game._00.Codes.CCTV
     {
         [SerializeField] private LayerMask obstacleLayer;
         [SerializeField] private float coolTime = 0.2f;
-        [SerializeField, Range(0,360)] private float fov = 60f;
+        [SerializeField, UnityEngine.Range(0,360)] private float fov = 60f;
         [SerializeField] private  float viewDistance = 5f;
         [SerializeField] private int raycastCount = 50;
         
@@ -15,6 +16,9 @@ namespace GGW.game._00.Codes.CCTV
         private Mesh mesh;
         private bool isIn = true;
         private float curCoolTime;
+        
+        public bool HasTarget { get; private set; }
+        public float LastDetectTime { get; private set; } = float.NegativeInfinity;
         
         public event Action<Transform> FindPlayer;
 
@@ -44,6 +48,7 @@ namespace GGW.game._00.Codes.CCTV
 
         private void LateUpdate()
         {
+            HasTarget = false;
             DrawFov();
         }
 
@@ -82,10 +87,18 @@ namespace GGW.game._00.Codes.CCTV
                 {
                     bool isTarget = (_targetLayer.value & (1 << hit.collider.gameObject.layer)) != 0;
                     
-                    if (isTarget && isIn)
+                    if (isTarget)
                     {
-                        FindPlayer?.Invoke(hit.collider.transform);
-                        isIn = false;
+                        // "지금 보이는가" 상태 + 감지 시각: 쓰로틀(isIn)과 무관하게 갱신
+                        HasTarget = true;
+                        LastDetectTime = Time.time;
+
+                        // 이벤트 발사만 쓰로틀 대상
+                        if (isIn)
+                        {
+                            FindPlayer?.Invoke(hit.collider.transform);
+                            isIn = false;
+                        }
                     }
                     vertex = UtilsClass.GetVectorFromAngle(angle) * ((hit.distance / viewDistance) * viewDistance);
                 }
