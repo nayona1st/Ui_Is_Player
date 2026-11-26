@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 
 namespace GGW.game._00.Codes
 {
-    public class Movement : MonoBehaviour
+    public class Movement : MonoBehaviour, ISlowable
     {
         [SerializeField] private SlowTrap trapEvent;
 
@@ -28,6 +28,11 @@ namespace GGW.game._00.Codes
         private void OnMove(InputValue value)
         {
             _moveDir = value.Get<Vector2>();
+        }
+
+        public void Slowed(float speedMultiplier, float duration)
+        {
+            Debug.Log("멈춰짐");
         }
     }
 }
